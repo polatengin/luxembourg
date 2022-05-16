@@ -1,4 +1,4 @@
-using System.Xml;
+﻿using System.Xml;
 using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
@@ -94,11 +94,33 @@ foreach (var kvp in outputList)
   {
     Console.ForegroundColor = ConsoleColor.Blue;
   }
-  else if (latest.Build > version.Build)
+  else if (latest.Patch > version.Patch)
   {
     Console.ForegroundColor = ConsoleColor.Yellow;
   }
-  Console.Write($"{latest.Build}");
+  Console.Write($"{latest.Patch}");
+  if (latest.Release != "")
+  {
+    if (latest.Major > version.Major)
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+    }
+    else if (latest.Minor > version.Minor)
+    {
+      Console.ForegroundColor = ConsoleColor.Blue;
+    }
+    else if (latest.Patch > version.Patch)
+    {
+      Console.ForegroundColor = ConsoleColor.Yellow;
+    }
+    else if (latest.Release != version.Release)
+    {
+      Console.ForegroundColor = ConsoleColor.Green;
+    }
+    Console.Write($"-{latest.Release}");
+  }
+
+  Console.ResetColor();
 
   Console.WriteLine();
 }
