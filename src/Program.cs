@@ -27,3 +27,6 @@ Console.WriteLine($"Checking {csprojFile}");
 Console.WriteLine();
 
 var xml = File.ReadAllText(csprojFile);
+
+var doc = new XmlDocument();
+doc.LoadXml(xml);
