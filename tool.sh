@@ -5,3 +5,12 @@ function pack() {
   dotnet pack
   popd
 }
+
+function install() {
+  echo "installing..."
+  pushd "./src"
+  dotnet build
+  dotnet pack
+  dotnet tool install --global --add-source "./nupkg" "dcu"
+  popd
+}
