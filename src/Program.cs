@@ -1,3 +1,4 @@
+using System.Xml;
 using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
