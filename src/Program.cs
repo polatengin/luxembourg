@@ -14,3 +14,8 @@ async Task<NuGetVersion> FindLatestVersionAsync(string id)
 }
 
 var files = Directory.GetFiles(".", "*.csproj");
+if (files.Length == 0)
+{
+  Console.WriteLine("No csproj files found.");
+  Environment.Exit(1);
+}
