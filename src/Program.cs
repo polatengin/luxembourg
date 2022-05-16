@@ -1,4 +1,4 @@
-using System.Xml;
+﻿using System.Xml;
 using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
@@ -49,3 +49,49 @@ foreach (XmlNode reference in references)
 var longestIdLength = outputList.Keys.Max(k => k.Length) + 2;
 var longestVersionLength = outputList.Values.Max(v => v.Item1.ToString().Length) + 2;
 var longestLatestLength = outputList.Values.Max(v => v.Item2.ToString().Length) + 2;
+
+foreach (var kvp in outputList)
+{
+  var id = kvp.Key;
+  var version = kvp.Value.Item1;
+  var latest = kvp.Value.Item2;
+
+  var firstSpacerLength = longestIdLength - id.Length;
+
+  Console.Write($"{id} {new string(' ', firstSpacerLength)}");
+
+  var secondSpacerLength = longestVersionLength - version.ToString().Length;
+  var thirdSpacerLength = longestLatestLength - latest.ToString().Length;
+
+  Console.Write($"{new string(' ', secondSpacerLength)}{version}   →{new string(' ', thirdSpacerLength)}");
+
+  if (latest.Major > version.Major)
+  {
+    Console.ForegroundColor = ConsoleColor.Red;
+  }
+  Console.Write($"{latest.Major}.");
+  if (latest.Major > version.Major)
+  {
+    Console.ForegroundColor = ConsoleColor.Red;
+  }
+  else if (latest.Minor > version.Minor)
+  {
+    Console.ForegroundColor = ConsoleColor.Blue;
+  }
+  Console.Write($"{latest.Minor}.");
+  if (latest.Major > version.Major)
+  {
+    Console.ForegroundColor = ConsoleColor.Red;
+  }
+  else if (latest.Minor > version.Minor)
+  {
+    Console.ForegroundColor = ConsoleColor.Blue;
+  }
+  else if (latest.Build > version.Build)
+  {
+    Console.ForegroundColor = ConsoleColor.Yellow;
+  }
+  Console.Write($"{latest.Build}");
+
+  Console.WriteLine();
+}
