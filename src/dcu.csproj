@@ -6,6 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <Authors>polatengin</Authors>
+    <Owners>polatengin</Owners>
+    <Copyright>Copyright 2022</Copyright>
+    <ProjectUrl>https://github.com/polatengin/luxembourg</ProjectUrl>
+
     <PackAsTool>true</PackAsTool>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <ToolCommandName>dcu</ToolCommandName>
