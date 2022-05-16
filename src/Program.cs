@@ -14,93 +14,71 @@ async Task<NuGetVersion> FindLatestVersionAsync(string id)
   return versions.OrderByDescending(v => v).FirstOrDefault()!;
 }
 
-var files = Directory.GetFiles(".", "*.csproj");
-if (files.Length == 0)
+async Task ProcessProjectFileAsync(string file)
 {
-  Console.WriteLine("No csproj files found.");
-  Environment.Exit(1);
-}
+  Console.WriteLine();
+  Console.WriteLine($"Checking {file}");
+  Console.WriteLine();
 
-var csprojFile = files.First();
+  var xml = File.ReadAllText(file);
 
-Console.WriteLine();
-Console.WriteLine($"Checking {csprojFile}");
-Console.WriteLine();
+  var doc = new XmlDocument();
+  doc.LoadXml(xml);
 
-var xml = File.ReadAllText(csprojFile);
+  var references = doc.SelectNodes("//Project/ItemGroup/PackageReference")!;
 
-var doc = new XmlDocument();
-doc.LoadXml(xml);
+  var outputList = new Dictionary<string, Tuple<NuGetVersion, NuGetVersion>>();
 
-var references = doc.SelectNodes("//Project/ItemGroup/PackageReference")!;
-
-var outputList = new Dictionary<string, Tuple<NuGetVersion, NuGetVersion>>();
-
-foreach (XmlNode reference in references)
-{
-  var id = reference!.Attributes?["Include"]?.Value;
-  if (id == null)
+  foreach (XmlNode reference in references)
   {
-    id = reference!.Attributes?["Update"]?.Value;
+    var id = reference!.Attributes?["Include"]?.Value;
+    if (id == null)
+    {
+      id = reference!.Attributes?["Update"]?.Value;
+    }
+    if (id == null)
+    {
+      continue;
+    }
+    var version = new NuGetVersion(reference!.Attributes!["Version"]!.Value!);
+    var latest = await FindLatestVersionAsync(id);
+
+    outputList.Add(id, Tuple.Create(version, latest));
   }
-  if (id == null)
-  {
-    continue;
-  }
-  var version = new NuGetVersion(reference!.Attributes!["Version"]!.Value!);
-  var latest = await FindLatestVersionAsync(id);
 
-  outputList.Add(id, Tuple.Create(version, latest));
-}
+  var longestIdLength = outputList.Keys.Max(k => k.Length) + 2;
+  var longestVersionLength = outputList.Values.Max(v => v.Item1.ToString().Length) + 2;
+  var longestLatestLength = outputList.Values.Max(v => v.Item2.ToString().Length) + 2;
 
-var longestIdLength = outputList.Keys.Max(k => k.Length) + 2;
-var longestVersionLength = outputList.Values.Max(v => v.Item1.ToString().Length) + 2;
-var longestLatestLength = outputList.Values.Max(v => v.Item2.ToString().Length) + 2;
+  foreach (var kvp in outputList)
+  {
+    var id = kvp.Key;
+    var version = kvp.Value.Item1;
+    var latest = kvp.Value.Item2;
 
-foreach (var kvp in outputList)
-{
-  var id = kvp.Key;
-  var version = kvp.Value.Item1;
-  var latest = kvp.Value.Item2;
+    var firstSpacerLength = longestIdLength - id.Length;
 
-  var firstSpacerLength = longestIdLength - id.Length;
+    Console.Write($"{id} {new string(' ', firstSpacerLength)}");
 
-  Console.Write($"{id} {new string(' ', firstSpacerLength)}");
+    var secondSpacerLength = longestVersionLength - version.ToString().Length;
+    var thirdSpacerLength = longestLatestLength - latest.ToString().Length;
 
-  var secondSpacerLength = longestVersionLength - version.ToString().Length;
-  var thirdSpacerLength = longestLatestLength - latest.ToString().Length;
+    Console.Write($"{new string(' ', secondSpacerLength)}{version}   →{new string(' ', thirdSpacerLength)}");
 
-  Console.Write($"{new string(' ', secondSpacerLength)}{version}   →{new string(' ', thirdSpacerLength)}");
-
-  if (latest.Major > version.Major)
-  {
-    Console.ForegroundColor = ConsoleColor.Red;
-  }
-  Console.Write($"{latest.Major}.");
-  if (latest.Major > version.Major)
-  {
-    Console.ForegroundColor = ConsoleColor.Red;
-  }
-  else if (latest.Minor > version.Minor)
-  {
-    Console.ForegroundColor = ConsoleColor.Blue;
-  }
-  Console.Write($"{latest.Minor}.");
-  if (latest.Major > version.Major)
-  {
-    Console.ForegroundColor = ConsoleColor.Red;
-  }
-  else if (latest.Minor > version.Minor)
-  {
-    Console.ForegroundColor = ConsoleColor.Blue;
-  }
-  else if (latest.Patch > version.Patch)
-  {
-    Console.ForegroundColor = ConsoleColor.Yellow;
-  }
-  Console.Write($"{latest.Patch}");
-  if (latest.Release != "")
-  {
+    if (latest.Major > version.Major)
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+    }
+    Console.Write($"{latest.Major}.");
+    if (latest.Major > version.Major)
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+    }
+    else if (latest.Minor > version.Minor)
+    {
+      Console.ForegroundColor = ConsoleColor.Blue;
+    }
+    Console.Write($"{latest.Minor}.");
     if (latest.Major > version.Major)
     {
       Console.ForegroundColor = ConsoleColor.Red;
@@ -113,14 +91,42 @@ foreach (var kvp in outputList)
     {
       Console.ForegroundColor = ConsoleColor.Yellow;
     }
-    else if (latest.Release != version.Release)
+    Console.Write($"{latest.Patch}");
+    if (latest.Release != "")
     {
-      Console.ForegroundColor = ConsoleColor.Green;
+      if (latest.Major > version.Major)
+      {
+        Console.ForegroundColor = ConsoleColor.Red;
+      }
+      else if (latest.Minor > version.Minor)
+      {
+        Console.ForegroundColor = ConsoleColor.Blue;
+      }
+      else if (latest.Patch > version.Patch)
+      {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+      }
+      else if (latest.Release != version.Release)
+      {
+        Console.ForegroundColor = ConsoleColor.Green;
+      }
+      Console.Write($"-{latest.Release}");
     }
-    Console.Write($"-{latest.Release}");
+
+    Console.ResetColor();
+
+    Console.WriteLine();
   }
+}
 
-  Console.ResetColor();
+var files = Directory.GetFiles(".", "*.csproj");
+if (files.Length == 0)
+{
+  Console.WriteLine("No csproj files found.");
+  Environment.Exit(1);
+}
 
-  Console.WriteLine();
+foreach (var file in files)
+{
+  await ProcessProjectFileAsync(file);
 }
