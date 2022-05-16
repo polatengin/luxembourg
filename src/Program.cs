@@ -12,3 +12,5 @@ async Task<NuGetVersion> FindLatestVersionAsync(string id)
 
   return versions.OrderByDescending(v => v).FirstOrDefault()!;
 }
+
+var files = Directory.GetFiles(".", "*.csproj");
