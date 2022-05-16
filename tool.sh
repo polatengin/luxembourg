@@ -18,3 +18,13 @@ function install() {
 function uninstall() {
   echo "uninstall"
 }
+
+if [ "$ACTION" = "install" ]; then
+  install
+elif [ "$ACTION" = "uninstall" ]; then
+  uninstall
+elif [ "$ACTION" = "pack" ]; then
+  pack
+else
+  echo "Usage: $0 [install|uninstall|pack]"
+fi
