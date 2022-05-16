@@ -38,10 +38,17 @@ var outputList = new Dictionary<string, Tuple<NuGetVersion, NuGetVersion>>();
 
 foreach (XmlNode reference in references)
 {
-  var id = reference!.Attributes!["Include"]!.Value!;
-  var version = new Version(reference!.Attributes!["Version"]!.Value!);
-
-  var latest = new Version((await FindLatestVersionAsync(id)).ToNormalizedString());
+  var id = reference!.Attributes?["Include"]?.Value;
+  if (id == null)
+  {
+    id = reference!.Attributes?["Update"]?.Value;
+  }
+  if (id == null)
+  {
+    continue;
+  }
+  var version = new NuGetVersion(reference!.Attributes!["Version"]!.Value!);
+  var latest = await FindLatestVersionAsync(id);
 
   outputList.Add(id, Tuple.Create(version, latest));
 }
