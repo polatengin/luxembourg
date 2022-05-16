@@ -45,3 +45,7 @@ foreach (XmlNode reference in references)
 
   outputList.Add(id, Tuple.Create(version, latest));
 }
+
+var longestIdLength = outputList.Keys.Max(k => k.Length) + 2;
+var longestVersionLength = outputList.Values.Max(v => v.Item1.ToString().Length) + 2;
+var longestLatestLength = outputList.Values.Max(v => v.Item2.ToString().Length) + 2;
