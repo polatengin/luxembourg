@@ -31,3 +31,5 @@ var xml = File.ReadAllText(csprojFile);
 
 var doc = new XmlDocument();
 doc.LoadXml(xml);
+
+var references = doc.SelectNodes("//Project/ItemGroup/PackageReference")!;
