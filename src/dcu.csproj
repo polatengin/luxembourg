@@ -6,6 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <PackAsTool>true</PackAsTool>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <ToolCommandName>dcu</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <PackageVersion>0.1.0</PackageVersion>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NuGet.Protocol" Version="6.2.0" />
