@@ -19,3 +19,11 @@ if (files.Length == 0)
   Console.WriteLine("No csproj files found.");
   Environment.Exit(1);
 }
+
+var csprojFile = files.First();
+
+Console.WriteLine();
+Console.WriteLine($"Checking {csprojFile}");
+Console.WriteLine();
+
+var xml = File.ReadAllText(csprojFile);
