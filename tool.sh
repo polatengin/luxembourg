@@ -14,3 +14,7 @@ function install() {
   dotnet tool install --global --add-source "./nupkg" "dcu"
   popd
 }
+
+function uninstall() {
+  echo "uninstall"
+}
