@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+
+  <ItemGroup>
+    <PackageReference Include="NuGet.Protocol" Version="6.2.0" />
+  </ItemGroup>
 </Project>
