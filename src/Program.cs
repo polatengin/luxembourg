@@ -1,4 +1,4 @@
-﻿using System.Xml;
+using System.Xml;
 using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
@@ -34,7 +34,7 @@ doc.LoadXml(xml);
 
 var references = doc.SelectNodes("//Project/ItemGroup/PackageReference")!;
 
-var outputList = new Dictionary<string, Tuple<Version, Version>>();
+var outputList = new Dictionary<string, Tuple<NuGetVersion, NuGetVersion>>();
 
 foreach (XmlNode reference in references)
 {
