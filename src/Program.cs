@@ -33,3 +33,15 @@ var doc = new XmlDocument();
 doc.LoadXml(xml);
 
 var references = doc.SelectNodes("//Project/ItemGroup/PackageReference")!;
+
+var outputList = new Dictionary<string, Tuple<Version, Version>>();
+
+foreach (XmlNode reference in references)
+{
+  var id = reference!.Attributes!["Include"]!.Value!;
+  var version = new Version(reference!.Attributes!["Version"]!.Value!);
+
+  var latest = new Version((await FindLatestVersionAsync(id)).ToNormalizedString());
+
+  outputList.Add(id, Tuple.Create(version, latest));
+}
