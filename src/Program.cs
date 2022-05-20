@@ -1,4 +1,4 @@
-﻿using System.Xml;
+using System.Xml;
 using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
@@ -19,7 +19,7 @@ public class Program
   async static Task ProcessProjectFileAsync(string file)
   {
     Console.WriteLine();
-    Console.WriteLine($"Checking {file}");
+    Console.WriteLine($"Checking {file}...");
     Console.WriteLine();
 
     var xml = File.ReadAllText(file);
