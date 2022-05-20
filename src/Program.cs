@@ -13,7 +13,14 @@ public class Program
 
     var versions = await resource.GetAllVersionsAsync(id, new SourceCacheContext(), NullLogger.Instance, CancellationToken.None);
 
-    return versions.OrderByDescending(v => v).FirstOrDefault()!;
+    var filtered = versions;
+
+    if (noPreview)
+    {
+      filtered = versions.Where(v => !v.IsPrerelease);
+    }
+
+    return filtered.OrderByDescending(v => v).FirstOrDefault()!;
   }
 
   async static Task ProcessProjectFileAsync(string file)
