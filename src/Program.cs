@@ -166,7 +166,7 @@ public class Program
     }
     foreach (var file in files)
     {
-      ProcessProjectFileAsync(file).Wait();
+      ProcessProjectFileAsync(file, noPreview, update).Wait();
     }
   }
 }
