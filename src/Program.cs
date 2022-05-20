@@ -50,7 +50,7 @@ public class Program
         continue;
       }
       var version = new NuGetVersion(reference!.Attributes!["Version"]!.Value!);
-      var latest = await FindLatestVersionAsync(id);
+      var latest = await FindLatestVersionAsync(id, noPreview);
 
       outputList.Add(id, Tuple.Create(version, latest));
     }
