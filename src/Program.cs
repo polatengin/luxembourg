@@ -132,6 +132,8 @@ public class Program
 
     var noPreview = false;
     var update = false;
+    if (args.Length > 0)
+    {
       if (args.Any(e => e == "-np") || args.Any(e => e == "--no-preview"))
       {
         noPreview = true;
@@ -140,6 +142,7 @@ public class Program
       {
         update = true;
       }
+    }
     foreach (var file in files)
     {
       ProcessProjectFileAsync(file).Wait();
