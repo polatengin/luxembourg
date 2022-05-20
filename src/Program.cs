@@ -131,9 +131,14 @@ public class Program
     }
 
     var noPreview = false;
+    var update = false;
       if (args.Any(e => e == "-np") || args.Any(e => e == "--no-preview"))
       {
         noPreview = true;
+      }
+      if (args.Any(e => e == "-u") || args.Any(e => e == "--update"))
+      {
+        update = true;
       }
     foreach (var file in files)
     {
