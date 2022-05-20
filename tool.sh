@@ -19,6 +19,8 @@ function uninstall() {
   echo "uninstall"
 }
 
+ACTION=${1}
+
 if [ "$ACTION" = "install" ]; then
   install
 elif [ "$ACTION" = "uninstall" ]; then
