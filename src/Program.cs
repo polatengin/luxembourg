@@ -23,7 +23,7 @@ public class Program
     return filtered.OrderByDescending(v => v).FirstOrDefault()!;
   }
 
-  async static Task ProcessProjectFileAsync(string file)
+  async static Task ProcessProjectFileAsync(string file, bool noPreview, bool update)
   {
     Console.WriteLine();
     Console.WriteLine($"Checking {file}...");
