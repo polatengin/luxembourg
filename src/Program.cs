@@ -6,7 +6,7 @@ using NuGet.Versioning;
 
 public class Program
 {
-  async static Task<NuGetVersion> FindLatestVersionAsync(string id)
+  async static Task<NuGetVersion> FindLatestVersionAsync(string id, bool noPreview)
   {
     var repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.json");
     var resource = await repository.GetResourceAsync<FindPackageByIdResource>();
