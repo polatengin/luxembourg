@@ -130,6 +130,11 @@ public class Program
       Environment.Exit(1);
     }
 
+    var noPreview = false;
+      if (args.Any(e => e == "-np") || args.Any(e => e == "--no-preview"))
+      {
+        noPreview = true;
+      }
     foreach (var file in files)
     {
       ProcessProjectFileAsync(file).Wait();
