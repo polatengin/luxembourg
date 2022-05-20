@@ -123,8 +123,8 @@ public class Program
 
   static void Main(string[] args)
   {
-    var files = Directory.GetFiles(".", "*.csproj");
-    if (files.Length == 0)
+    var files = Directory.GetFiles(".", "*.csproj").ToList();
+    if (files.Count == 0)
     {
       Console.WriteLine("No csproj files found.");
       Environment.Exit(1);
