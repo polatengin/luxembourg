@@ -52,6 +52,11 @@ public class Program
       var version = new NuGetVersion(reference!.Attributes!["Version"]!.Value!);
       var latest = await FindLatestVersionAsync(id, noPreview);
 
+      if (update)
+      {
+        reference.Attributes!["Version"]!.Value = latest.ToNormalizedString();
+      }
+
       outputList.Add(id, Tuple.Create(version, latest));
     }
 
