@@ -60,6 +60,13 @@ public class Program
       outputList.Add(id, Tuple.Create(version, latest));
     }
 
+    if (update)
+    {
+      var settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true };
+      using var writer = XmlWriter.Create(file, settings);
+      doc.Save(writer);
+    }
+
     var longestIdLength = outputList.Keys.Max(k => k.Length) + 2;
     var longestVersionLength = outputList.Values.Max(v => v.Item1.ToString().Length) + 2;
     var longestLatestLength = outputList.Values.Max(v => v.Item2.ToString().Length) + 2;
