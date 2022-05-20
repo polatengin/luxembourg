@@ -78,28 +78,50 @@ public class Program
       var latest = kvp.Value.Item2;
 
       var firstSpacerLength = longestIdLength - id.Length;
-
-      Console.Write($"{id} {new string(' ', firstSpacerLength)}");
-
       var secondSpacerLength = longestVersionLength - version.ToString().Length;
       var thirdSpacerLength = longestLatestLength - latest.ToString().Length;
 
-      Console.Write($"{new string(' ', secondSpacerLength)}{version}   →{new string(' ', thirdSpacerLength)}");
+      Console.Write($"{id} {new string(' ', firstSpacerLength)}{new string(' ', secondSpacerLength)}{version}   →{new string(' ', thirdSpacerLength)}");
 
-      if (latest.Major > version.Major)
-      {
-        Console.ForegroundColor = ConsoleColor.Red;
-      }
-      Console.Write($"{latest.Major}.");
-      if (latest.Major > version.Major)
-      {
-        Console.ForegroundColor = ConsoleColor.Red;
-      }
-      else if (latest.Minor > version.Minor)
-      {
-        Console.ForegroundColor = ConsoleColor.Blue;
-      }
-      Console.Write($"{latest.Minor}.");
+      PrintLatestVersion(version, latest);
+
+      Console.ResetColor();
+
+      Console.WriteLine();
+    }
+  }
+
+  private static void PrintLatestVersion(NuGetVersion version, NuGetVersion latest)
+  {
+    if (latest.Major > version.Major)
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+    }
+    Console.Write($"{latest.Major}.");
+    if (latest.Major > version.Major)
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+    }
+    else if (latest.Minor > version.Minor)
+    {
+      Console.ForegroundColor = ConsoleColor.Blue;
+    }
+    Console.Write($"{latest.Minor}.");
+    if (latest.Major > version.Major)
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+    }
+    else if (latest.Minor > version.Minor)
+    {
+      Console.ForegroundColor = ConsoleColor.Blue;
+    }
+    else if (latest.Patch > version.Patch)
+    {
+      Console.ForegroundColor = ConsoleColor.Yellow;
+    }
+    Console.Write($"{latest.Patch}");
+    if (latest.Release != "")
+    {
       if (latest.Major > version.Major)
       {
         Console.ForegroundColor = ConsoleColor.Red;
@@ -112,31 +134,11 @@ public class Program
       {
         Console.ForegroundColor = ConsoleColor.Yellow;
       }
-      Console.Write($"{latest.Patch}");
-      if (latest.Release != "")
+      else if (latest.Release != version.Release)
       {
-        if (latest.Major > version.Major)
-        {
-          Console.ForegroundColor = ConsoleColor.Red;
-        }
-        else if (latest.Minor > version.Minor)
-        {
-          Console.ForegroundColor = ConsoleColor.Blue;
-        }
-        else if (latest.Patch > version.Patch)
-        {
-          Console.ForegroundColor = ConsoleColor.Yellow;
-        }
-        else if (latest.Release != version.Release)
-        {
-          Console.ForegroundColor = ConsoleColor.Green;
-        }
-        Console.Write($"-{latest.Release}");
+        Console.ForegroundColor = ConsoleColor.Green;
       }
-
-      Console.ResetColor();
-
-      Console.WriteLine();
+      Console.Write($"-{latest.Release}");
     }
   }
 
